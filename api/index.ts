@@ -1,5 +1,5 @@
 import { NestFactory } from "@nestjs/core";
-import { AppModule } from "src/app.module";
+import { AppModule } from "../src/app.module";
 
 const NezlyApp = (async () => {
     const app = await NestFactory.create(AppModule);
