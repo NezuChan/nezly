@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
 import "dotenv/config";
-import { AppController } from "./app.controller.js";
-import { AppNodeService } from "./app.node.service.js";
+import { AppController } from "./app.controller";
+import { AppNodeService } from "./app.node.service";
 
 @Module({
     controllers: [AppController],
