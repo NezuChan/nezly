@@ -1,23 +1,17 @@
 {
-    "compilerOptions": {
-        "target": "ES2022",
-        "module": "ESNext",
-        "moduleResolution": "Node",
-        "lib": ["ES2022"],
-        "strict": true,
-        "esModuleInterop": true,
-        "allowSyntheticDefaultImports": true,
-        "experimentalDecorators": true,
-        "emitDecoratorMetadata": true,
-        "skipLibCheck": false,
-        "noEmitHelpers": true,
-        "importHelpers": true,
-        "resolveJsonModule": true,
-        "strictNullChecks": true,
-        "sourceMap": true,
-        "baseUrl": "./",
-        "incremental": true,
-    },
-    "include": ["**/**.ts"],
-    "exclude": ["node_modules"]
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "es2017",
+    "sourceMap": true,
+    "baseUrl": "./",
+    "incremental": true,
+    "skipLibCheck": true
+  },
+  "include": ["/**/**.ts"],
+  "exclude": ["node_modules"]
 }
