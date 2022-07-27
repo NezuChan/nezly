@@ -1,0 +1,59 @@
+{
+  "name": "nezly",
+  "version": "1.0.0",
+  "description": "A REST Proxy container for the Lavalink REST API.",
+  "main": "api/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint **/*.ts",
+    "lint:fix": "eslint **/*.ts --fix"
+  },
+  "type": "module",
+  "author": "KagChi",
+  "license": "GPL-3.0",
+  "devDependencies": {
+    "@hazmi35/eslint-config": "^8.4.2",
+    "@swc/cli": "^0.1.57",
+    "@swc/core": "^1.2.218",
+    "@types/express": "^4.17.13",
+    "@types/node": "^17.0.31",
+    "@typescript-eslint/eslint-plugin": "^5.31.0",
+    "@typescript-eslint/parser": "^5.31.0",
+    "eslint": "^8.20.0",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.7.4"
+  },
+  "eslintConfig": {
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+      "@typescript-eslint"
+    ],
+    "parserOptions": {
+      "project": "./tsconfig.json"
+    },
+    "extends": [
+      "eslint:recommended",
+      "plugin:@typescript-eslint/recommended",
+      "@hazmi35/eslint-config/typescript"
+    ],
+    "rules": {
+      "@typescript-eslint/no-extraneous-class": "off",
+      "@typescript-eslint/no-empty-function": "off",
+      "@typescript-eslint/no-useless-constructor": "off",
+      "class-methods-use-this": "off"
+    }
+  },
+  "dependencies": {
+    "@kirishima/rest": "^0.2.2",
+    "@nestjs/common": "^9.0.5",
+    "@nestjs/core": "^9.0.5",
+    "@sapphire/result": "^2.0.1",
+    "@sapphire/utilities": "^3.7.0",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "lavalink-api-types": "^1.1.2",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^7.5.6",
+    "undici": "^5.8.0"
+  }
+}
