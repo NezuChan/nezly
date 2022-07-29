@@ -44,7 +44,7 @@ export class AppController {
         }
     }
 
-    @Get("/decodeTrack")
+    @Get("/decodetrack")
     public async getDecodeTrack(
         @Res() res: Response,
             @Req() req: Request,
@@ -67,7 +67,7 @@ export class AppController {
         }
     }
 
-    @Post("/decodeTracks")
+    @Post("/decodetracks")
     public async postDecodeTracks(
         @Res() res: Response,
             @Req() req: Request,
