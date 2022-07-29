@@ -35,7 +35,7 @@ export class AppController {
             const source = identifier.split(":")[0];
             const query = identifier.split(":")[1];
 
-            const timeout = setTimeout(() => Result.fromAsync(this.getLoadTracks(res, req, identifier, node.name)), Time.Second * Number(process.env.TIMEOUT ?? 3));
+            const timeout = setTimeout(() => Result.fromAsync(this.getLoadTracks(res, req, identifier, node.name)), Time.Second * Number(process.env.TIMEOUT_SECONDS ?? 3));
             const result = await nodeRest.loadTracks(source ? { source, query } : identifier);
             clearTimeout(timeout);
 
@@ -59,7 +59,7 @@ export class AppController {
             const nodeRest = new REST(node.secure ? `https://${node.host}` : `http://${node.host}`)
                 .setAuthorization(node.auth);
 
-            const timeout = setTimeout(() => Result.fromAsync(this.getDecodeTrack(res, req, track, node.name)), Time.Second * Number(process.env.TIMEOUT ?? 3));
+            const timeout = setTimeout(() => Result.fromAsync(this.getDecodeTrack(res, req, track, node.name)), Time.Second * Number(process.env.TIMEOUT_SECONDS ?? 3));
             const result = await nodeRest.decodeTracks([track]);
             clearTimeout(timeout);
 
@@ -82,7 +82,7 @@ export class AppController {
             const nodeRest = new REST(node.secure ? `https://${node.host}` : `http://${node.host}`)
                 .setAuthorization(node.auth);
 
-            const timeout = setTimeout(() => Result.fromAsync(this.postDecodeTracks(res, req, tracks, node.name)), Time.Second * Number(process.env.TIMEOUT ?? 3));
+            const timeout = setTimeout(() => Result.fromAsync(this.postDecodeTracks(res, req, tracks, node.name)), Time.Second * Number(process.env.TIMEOUT_SECONDS ?? 3));
             const result = await nodeRest.decodeTracks(tracks);
             clearTimeout(timeout);
 
