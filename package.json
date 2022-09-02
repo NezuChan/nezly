@@ -49,7 +49,7 @@
     "@nestjs/platform-express": "^9.0.11",
     "@sapphire/result": "^2.4.1",
     "@sapphire/time-utilities": "^1.7.6",
-    "@sapphire/utilities": "^3.9.2",
+    "@sapphire/utilities": "^3.9.3",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "lavalink-api-types": "^1.1.2",
