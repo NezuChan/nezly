@@ -4,7 +4,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { Body, Controller, Get, Post, Query, Req, Res } from "@nestjs/common";
 import { Response, Request } from "express";
-import { LoadTypeEnum } from "lavalink-api-types";
+import { LavalinkTrack, LoadTypeEnum } from "lavalink-api-types";
 import { AppNodeService } from "./app.node.service";
 import { REST } from "@kirishima/rest";
 import { Result } from "@sapphire/result";
@@ -48,25 +48,27 @@ export class AppController {
                 .return.all();
 
             if (cachedTracks.length) {
-                return res.json({
-                    // TODO: rework this
-                    loadType: LoadTypeEnum.SEARCH_RESULT,
-                    tracks: cachedTracks.map(x => ({
-                        info: {
-                            identifier: x.toJSON().identifier,
-                            isSeekable: x.toJSON().isSeekable,
-                            author: x.toJSON().author,
-                            length: x.toJSON().length,
-                            isStream: x.toJSON().isStream,
-                            position: x.toJSON().position,
-                            title: x.toJSON().title,
-                            uri: x.toJSON().uri,
-                            sourceName: x.toJSON().sourceName,
-                            artworkUrl: x.toJSON().artworkUrl
-                        },
-                        track: x.toJSON().track
-                    }))
-                });
+                return res
+                    .header({ "x-cache-hits": true })
+                    .json({
+                        // TODO: rework this
+                        loadType: LoadTypeEnum.SEARCH_RESULT,
+                        tracks: cachedTracks.map(x => ({
+                            info: {
+                                identifier: x.toJSON().identifier,
+                                isSeekable: x.toJSON().isSeekable,
+                                author: x.toJSON().author,
+                                length: x.toJSON().length,
+                                isStream: x.toJSON().isStream,
+                                position: x.toJSON().position,
+                                title: x.toJSON().title,
+                                uri: x.toJSON().uri,
+                                sourceName: x.toJSON().sourceName,
+                                artworkUrl: x.toJSON().artworkUrl
+                            },
+                            track: x.toJSON().track
+                        }))
+                    });
             }
 
             const node = this.appNodeService.getLavalinkNode(req.headers["x-node-name"] as string, excludeNode);
@@ -94,6 +96,30 @@ export class AppController {
     ): Promise<Response> {
         try {
             if (req.headers.authorization !== process.env.AUTHORIZATION) return res.sendStatus(401);
+
+            const cachedTrack = await this.appCacheService.trackRepository()
+                .search()
+                .where("track")
+                .equalTo(track)
+                .return.first();
+
+            if (cachedTrack) {
+                return res
+                    .header({ "x-cache-hits": true })
+                    .json({
+                        identifier: cachedTrack.toJSON().identifier,
+                        isSeekable: cachedTrack.toJSON().isSeekable,
+                        author: cachedTrack.toJSON().author,
+                        length: cachedTrack.toJSON().length,
+                        isStream: cachedTrack.toJSON().isStream,
+                        position: cachedTrack.toJSON().position,
+                        title: cachedTrack.toJSON().title,
+                        uri: cachedTrack.toJSON().uri,
+                        sourceName: cachedTrack.toJSON().sourceName,
+                        artworkUrl: cachedTrack.toJSON().artworkUrl
+                    });
+            }
+
             const node = this.appNodeService.getLavalinkNode(req.headers["x-node-name"] as string, excludeNode);
             const nodeRest = new REST(node.secure ? `https://${node.host}` : `http://${node.host}`)
                 .setAuthorization(node.auth);
@@ -117,6 +143,37 @@ export class AppController {
     ): Promise<Response> {
         try {
             if (req.headers.authorization !== process.env.AUTHORIZATION) return res.sendStatus(401);
+            const results: any[] = [];
+
+            for (const track of tracks) {
+                const cachedTrack = await this.appCacheService.trackRepository()
+                    .search()
+                    .where("track")
+                    .equalTo(track)
+                    .return.first();
+
+                if (cachedTrack) {
+                    results.push({
+                        identifier: cachedTrack.toJSON().identifier,
+                        isSeekable: cachedTrack.toJSON().isSeekable,
+                        author: cachedTrack.toJSON().author,
+                        length: cachedTrack.toJSON().length,
+                        isStream: cachedTrack.toJSON().isStream,
+                        position: cachedTrack.toJSON().position,
+                        title: cachedTrack.toJSON().title,
+                        uri: cachedTrack.toJSON().uri,
+                        sourceName: cachedTrack.toJSON().sourceName,
+                        artworkUrl: cachedTrack.toJSON().artworkUrl
+                    });
+                }
+            }
+
+            if (results.length) {
+                return res
+                    .header({ "x-cache-hits": true })
+                    .json(results);
+            }
+
             const node = this.appNodeService.getLavalinkNode(req.headers["x-node-name"] as string, excludeNode);
             const nodeRest = new REST(node.secure ? `https://${node.host}` : `http://${node.host}`)
                 .setAuthorization(node.auth);
