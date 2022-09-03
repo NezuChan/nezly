@@ -9,9 +9,11 @@ export class AppCacheService {
     public client = new Client();
     public constructor(
     ) {
-        void Result.fromAsync(() => this.client.open(process.env.REDIS_URL));
-        void Result.fromAsync(() => this.client.fetchRepository(TrackSchema).createIndex());
-        void Result.fromAsync(() => this.client.fetchRepository(PlaylistSchema).createIndex());
+        if (process.env.REDIS_URL) {
+            void Result.fromAsync(() => this.client.open(process.env.REDIS_URL));
+            void Result.fromAsync(() => this.client.fetchRepository(TrackSchema).createIndex());
+            void Result.fromAsync(() => this.client.fetchRepository(PlaylistSchema).createIndex());
+        }
     }
 
     public getTrackRepository(): Repository<Track> {
