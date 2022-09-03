@@ -125,10 +125,12 @@ export class AppController {
                 .setAuthorization(node.auth);
 
             const timeout = setTimeout(() => Result.fromAsync(this.getDecodeTrack(res, req, track, node.name)), Time.Second * Number(process.env.TIMEOUT_SECONDS ?? 3));
-            const result = await nodeRest.decodeTracks([track]);
+            const results = await nodeRest.decodeTracks([track]);
             clearTimeout(timeout);
 
-            return res.json(result[0].info);
+            for (const lavalinkTrack of results) await this.appCacheService.trackRepository().createAndSave({ track, ...lavalinkTrack.info });
+
+            return res.json(results[0].info);
         } catch (e) {
             return res.status(500).json({ status: 500, message: e.message });
         }
@@ -179,10 +181,12 @@ export class AppController {
                 .setAuthorization(node.auth);
 
             const timeout = setTimeout(() => Result.fromAsync(this.postDecodeTracks(res, req, tracks, node.name)), Time.Second * Number(process.env.TIMEOUT_SECONDS ?? 3));
-            const result = await nodeRest.decodeTracks(tracks);
+            const decodeResults = await nodeRest.decodeTracks(tracks);
             clearTimeout(timeout);
 
-            return res.json(result.map(x => x.info));
+            for (const track of decodeResults) await this.appCacheService.trackRepository().createAndSave({ track: track.track, ...track.info });
+
+            return res.json(decodeResults.map(x => x.info));
         } catch (e) {
             return res.status(500).json({ status: 500, message: e.message });
         }
