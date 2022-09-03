@@ -4,7 +4,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { Body, Controller, Get, Post, Query, Req, Res } from "@nestjs/common";
 import { Response, Request } from "express";
-import { LavalinkTrack, LoadTypeEnum } from "lavalink-api-types";
+import { LoadTypeEnum } from "lavalink-api-types";
 import { AppNodeService } from "./app.node.service";
 import { REST } from "@kirishima/rest";
 import { Result } from "@sapphire/result";
