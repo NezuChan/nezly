@@ -49,7 +49,7 @@ export class AppController {
 
             if (cachedTracks.length) {
                 return res
-                    .header({ "x-cache-hits": true })
+                    .header({ "X-Cache-Hits": true })
                     .json({
                         // TODO: rework this
                         loadType: LoadTypeEnum.SEARCH_RESULT,
@@ -105,7 +105,7 @@ export class AppController {
 
             if (cachedTrack) {
                 return res
-                    .header({ "x-cache-hits": true })
+                    .header({ "X-Cache-Hits": true })
                     .json({
                         identifier: cachedTrack.toJSON().identifier,
                         isSeekable: cachedTrack.toJSON().isSeekable,
@@ -172,7 +172,7 @@ export class AppController {
 
             if (results.length) {
                 return res
-                    .header({ "x-cache-hits": true })
+                    .header({ "X-Cache-Hits": true })
                     .json(results);
             }
 
