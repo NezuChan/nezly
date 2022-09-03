@@ -11,7 +11,7 @@ export const TrackSchema = new Schema(Track, {
     isStream: { type: "boolean" },
     position: { type: "number" },
     title: { type: "text" },
-    uri: { type: "string" },
+    uri: { type: "text" },
     sourceName: { type: "string" },
     artworkUrl: { type: "string" }
 });

@@ -39,7 +39,7 @@ export class AppController {
             const source = identifier.split(":")[0];
             const query = identifier.split(":")[1];
 
-            const cachedTracks = await this.appCacheService.trackRepository()
+            const cachedTracks = await this.appCacheService.getTrackRepository()
                 .search()
                 .where("title")
                 .matches(query)
@@ -80,7 +80,7 @@ export class AppController {
             clearTimeout(timeout);
 
             if (!result.tracks.length) return await this.getLoadTracks(res, req, identifier, node.name, (resolveAttempt ?? 0) + 1);
-            for (const track of result.tracks) await this.appCacheService.trackRepository().createAndSave({ track: track.track, ...track.info });
+            for (const track of result.tracks) await this.appCacheService.getTrackRepository().createAndSave({ track: track.track, ...track.info });
             return res.json(result);
         } catch (e) {
             return res.status(500).json({ status: 500, message: e.message });
@@ -97,7 +97,7 @@ export class AppController {
         try {
             if (req.headers.authorization !== process.env.AUTHORIZATION) return res.sendStatus(401);
 
-            const cachedTrack = await this.appCacheService.trackRepository()
+            const cachedTrack = await this.appCacheService.getTrackRepository()
                 .search()
                 .where("track")
                 .equalTo(track)
@@ -128,7 +128,7 @@ export class AppController {
             const results = await nodeRest.decodeTracks([track]);
             clearTimeout(timeout);
 
-            for (const lavalinkTrack of results) await this.appCacheService.trackRepository().createAndSave({ track, ...lavalinkTrack.info });
+            for (const lavalinkTrack of results) await this.appCacheService.getTrackRepository().createAndSave({ track, ...lavalinkTrack.info });
 
             return res.json(results[0].info);
         } catch (e) {
@@ -148,7 +148,7 @@ export class AppController {
             const results: any[] = [];
 
             for (const track of tracks) {
-                const cachedTrack = await this.appCacheService.trackRepository()
+                const cachedTrack = await this.appCacheService.getTrackRepository()
                     .search()
                     .where("track")
                     .equalTo(track)
@@ -184,7 +184,7 @@ export class AppController {
             const decodeResults = await nodeRest.decodeTracks(tracks);
             clearTimeout(timeout);
 
-            for (const track of decodeResults) await this.appCacheService.trackRepository().createAndSave({ track: track.track, ...track.info });
+            for (const track of decodeResults) await this.appCacheService.getTrackRepository().createAndSave({ track: track.track, ...track.info });
 
             return res.json(decodeResults.map(x => x.info));
         } catch (e) {
