@@ -11,8 +11,9 @@
     "sourceMap": true,
     "baseUrl": "./",
     "incremental": true,
+    "outDir": "./dist",
     "skipLibCheck": true
   },
   "include": ["./**/**.ts"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "dist"]
 }
