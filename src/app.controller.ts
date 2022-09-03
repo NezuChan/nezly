@@ -28,7 +28,7 @@ export class AppController {
         try {
             if (req.headers.authorization !== process.env.AUTHORIZATION) return res.sendStatus(401);
             if (!identifier || (resolveAttempt && resolveAttempt > 3)) return res.json({ playlistInfo: {}, loadType: LoadTypeEnum.NO_MATCHES, tracks: [] });
-            const node = this.appNodeService.getLavalinkNode(excludeNode);
+            const node = this.appNodeService.getLavalinkNode(req.headers["x-node-name"] as string, excludeNode);
             const nodeRest = new REST(node.secure ? `https://${node.host}` : `http://${node.host}`)
                 .setAuthorization(node.auth);
 
@@ -55,7 +55,7 @@ export class AppController {
     ): Promise<Response> {
         try {
             if (req.headers.authorization !== process.env.AUTHORIZATION) return res.sendStatus(401);
-            const node = this.appNodeService.getLavalinkNode(excludeNode);
+            const node = this.appNodeService.getLavalinkNode(req.headers["x-node-name"] as string, excludeNode);
             const nodeRest = new REST(node.secure ? `https://${node.host}` : `http://${node.host}`)
                 .setAuthorization(node.auth);
 
@@ -78,7 +78,7 @@ export class AppController {
     ): Promise<Response> {
         try {
             if (req.headers.authorization !== process.env.AUTHORIZATION) return res.sendStatus(401);
-            const node = this.appNodeService.getLavalinkNode(excludeNode);
+            const node = this.appNodeService.getLavalinkNode(req.headers["x-node-name"] as string, excludeNode);
             const nodeRest = new REST(node.secure ? `https://${node.host}` : `http://${node.host}`)
                 .setAuthorization(node.auth);
 

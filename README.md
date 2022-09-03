@@ -17,3 +17,4 @@
 - Multiple Lavalink nodes support
 - Configure-able response timeout
 - Vercel Serverless support
+- Use preferred custom node using `x-node-name` headers
