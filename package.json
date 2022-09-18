@@ -48,7 +48,7 @@
     "@nestjs/core": "^9.0.11",
     "@nestjs/platform-express": "^9.0.11",
     "@sapphire/result": "^2.4.1",
-    "@sapphire/time-utilities": "^1.7.6",
+    "@sapphire/time-utilities": "^1.7.8",
     "@sapphire/utilities": "^3.9.3",
     "dotenv": "^16.0.2",
     "express": "^4.18.1",
