@@ -18,3 +18,7 @@
 - Configure-able response timeout
 - Vercel Serverless support
 - Use preferred custom node using `x-node-name` headers
+
+# Redis Caching (NEW)
+- Tracks cache are guaranteed not to be bypassed
+- Redis must be using `RedisSearch` and `RedisJSON`
