@@ -51,7 +51,7 @@ export class AppController {
                         method: "POST",
                         body: JSON.stringify({
                             type: "LOAD_TRACKS",
-                            user: req.headers["x-user-id"] ?? null,
+                            user: req.headers["x-requester-id"] ?? null,
                             tracks: result.tracks,
                             loadType: result.loadType,
                             playlistInfo: result.playlistInfo
@@ -93,7 +93,7 @@ export class AppController {
                         method: "POST",
                         body: JSON.stringify({
                             type: "DECODE_TRACKS",
-                            user: req.headers["x-user-id"] ?? null,
+                            user: req.headers["x-requester-id"] ?? null,
                             tracks: result
                         })
                     });
@@ -133,7 +133,7 @@ export class AppController {
                         method: "POST",
                         body: JSON.stringify({
                             type: "DECODE_TRACKS",
-                            user: req.headers["x-user-id"] ?? null,
+                            user: req.headers["x-requester-id"] ?? null,
                             tracks: result
                         })
                     });
