@@ -18,3 +18,11 @@
 - Configure-able response timeout
 - Vercel Serverless support
 - Use preferred custom node using `x-node-name` headers
+- Usage analytics, such as tracks info, requester (if user append x-requester-id). everything were sent to client webhook (if set).
+
+# Not implemented
+- Lavalink RoutePlanner Endpoint
+- Lavalink Plugins Endpoint
+
+# Usage
+- You may uses this for scaling LavaLink track loading not for proxying everything via this module
