@@ -4,7 +4,7 @@
   "description": "A REST Proxy container for the Lavalink REST API.",
   "main": "dist/api/index.js",
   "scripts": {
-    "compile": "rimraf dist && tsc",
+    "compile": "rimraf dist && tsc --outDir dist",
     "lint": "eslint **/*.ts",
     "lint:fix": "eslint **/*.ts --fix"
   },
