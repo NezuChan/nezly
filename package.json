@@ -55,6 +55,6 @@
     "lavalink-api-types": "^1.1.5",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.5.7",
-    "undici": "^5.11.0"
+    "undici": "^5.12.0"
   }
 }
