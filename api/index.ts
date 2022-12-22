@@ -68,6 +68,21 @@ fastify.get("/loadtracks", {
     const fetchTracks = async () => {
         if (reply.sent) return;
         const result = await node.loadTracks(source ? { source, query } : identifier);
+        if (process.env.WEBHOOK_URL) {
+            void Result.fromAsync(async () => {
+                await fetch(process.env.WEBHOOK_URL!, {
+                    headers: {
+                        Authorization: process.env.WEBHOOK_AUTHORIZATION!
+                    },
+                    method: "POST",
+                    body: JSON.stringify({
+                        ...result,
+                        type: "LOAD_TRACKS",
+                        user: request.headers["x-requester-id"] ?? null
+                    })
+                });
+            });
+        }
         return reply.send(result);
     };
 
@@ -93,7 +108,22 @@ fastify.get("/decodetrack", {
     const fetchTracks = async () => {
         if (reply.sent) return;
         const result = await node.decodeTracks(track);
-        return reply.send(result);
+        if (process.env.WEBHOOK_URL) {
+            void Result.fromAsync(async () => {
+                await fetch(process.env.WEBHOOK_URL!, {
+                    method: "POST",
+                    headers: {
+                        Authorization: process.env.WEBHOOK_AUTHORIZATION!
+                    },
+                    body: JSON.stringify({
+                        type: "DECODE_TRACKS",
+                        user: request.headers["x-requester-id"] ?? null,
+                        tracks: result
+                    })
+                });
+            });
+        }
+        return reply.send(result[0].info);
     };
 
     const timeout = setTimeout(() => Result.fromAsync(() => fetchTracks()), Time.Second * Number(process.env.TIMEOUT_SECONDS ?? 3));
@@ -112,7 +142,22 @@ fastify.post("/decodetracks", {
     const fetchTracks = async () => {
         if (reply.sent) return;
         const result = await node.decodeTracks(tracks);
-        return reply.send(result);
+        if (process.env.WEBHOOK_URL) {
+            void Result.fromAsync(async () => {
+                await fetch(process.env.WEBHOOK_URL!, {
+                    method: "POST",
+                    headers: {
+                        Authorization: process.env.WEBHOOK_AUTHORIZATION!
+                    },
+                    body: JSON.stringify({
+                        type: "DECODE_TRACKS",
+                        user: request.headers["x-requester-id"] ?? null,
+                        tracks: result
+                    })
+                });
+            });
+        }
+        return reply.send(result.map(x => x.info));
     };
 
     const timeout = setTimeout(() => Result.fromAsync(() => fetchTracks()), Time.Second * Number(process.env.TIMEOUT_SECONDS ?? 3));
