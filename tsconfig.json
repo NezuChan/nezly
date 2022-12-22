@@ -13,6 +13,6 @@
     "incremental": true,
     "skipLibCheck": true
   },
-  "include": ["./**/**.ts"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "node_modules/**/**.d.ts"],
+  "include": ["api/**/**.ts", "api/**/**.json", "tsup.config.ts"],
 }
