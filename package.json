@@ -1,13 +1,15 @@
 {
   "name": "nezly",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "A REST Proxy container for the Lavalink REST API.",
-  "main": "dist/api/index.js",
+  "main": "dist/index.js",
   "scripts": {
     "compile": "rimraf dist && tsc --outDir dist",
     "lint": "eslint **/*.ts",
-    "lint:fix": "eslint **/*.ts --fix"
+    "lint:fix": "eslint **/*.ts --fix",
+    "start:dev": "npm run compile && node dist"
   },
+  "type": "module",
   "author": "KagChi",
   "license": "GPL-3.0",
   "devDependencies": {
@@ -44,17 +46,14 @@
   },
   "dependencies": {
     "@kirishima/rest": "^0.2.5",
-    "@nestjs/common": "^9.2.1",
-    "@nestjs/core": "^9.2.1",
-    "@nestjs/platform-express": "^9.2.1",
     "@sapphire/result": "^2.6.0",
     "@sapphire/time-utilities": "^1.7.8",
     "@sapphire/utilities": "^3.11.0",
     "dotenv": "^16.0.3",
-    "express": "^4.18.2",
+    "fastify": "^4.10.2",
     "lavalink-api-types": "^1.1.5",
+    "pino-pretty": "^9.1.1",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "^7.6.0",
     "undici": "^5.14.0"
   }
 }
