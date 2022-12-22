@@ -9,6 +9,8 @@ import { NodeOptions } from "./types";
 import { cast } from "@sapphire/utilities";
 import { REST } from "@kirishima/rest";
 import { LoadTypeEnum } from "lavalink-api-types";
+import { fetch } from "undici";
+import { BodyInit } from "undici/types/fetch";
 
 const fastify = Fastify({
     logger: Pino({
@@ -85,6 +87,20 @@ fastify.post("/decodetracks", {
 
     const result = await node.decodeTracks(tracks);
     return reply.send(result);
+});
+
+fastify.get("*", async (request, reply) => {
+    const node = getLavalinkNode();
+    const fetchResult = await fetch(`${node.url}${request.url}`, { method: "GET", headers: { ...node.headers } });
+    if (fetchResult.headers.get("content-type")?.startsWith("application/json")) return reply.status(fetchResult.status).send(await fetchResult.json());
+    return reply.status(fetchResult.status).send(await fetchResult.text());
+});
+
+fastify.post("*", async (request, reply) => {
+    const node = getLavalinkNode();
+    const fetchResult = await fetch(`${node.url}${request.url}`, { method: "POST", body: request.body as BodyInit, headers: { ...node.headers } });
+    if (fetchResult.headers.get("content-type")?.startsWith("application/json")) return reply.status(fetchResult.status).send(await fetchResult.json());
+    return reply.status(fetchResult.status).send(await fetchResult.text());
 });
 
 void fastify.listen({ host: "0.0.0.0", port: Number(process.env.PORT ?? 3000) });
