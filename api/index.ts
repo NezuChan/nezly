@@ -37,6 +37,14 @@ function getLavalinkNode(nodeName?: string, excludeNode?: string): REST {
 
 fastify.get("/", () => ({ message: "LavaLink REST Proxy API" }));
 
+for (const route of cast<string[]>(JSON.parse(process.env.DISABLED_ROUTES ?? "[]"))) {
+    fastify.route({
+        method: ["GET", "POST"],
+        url: route,
+        handler: async (request, reply) => reply.status(404).send({ timestamp: new Date().toISOString(), status: 404, error: "Not Found", message: "Not Found", path: request.url })
+    });
+}
+
 fastify.get("/loadtracks", {
     schema: {
         querystring: {
