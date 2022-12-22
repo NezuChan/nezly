@@ -66,8 +66,9 @@ fastify.get("/loadtracks", {
     const query = identifier.split(":")[1];
 
     const fetchTracks = async () => {
+        if (reply.sent) return;
         const result = await node.loadTracks(source ? { source, query } : identifier);
-        if (!reply.sent) return reply.send(result);
+        return reply.send(result);
     };
 
     const timeout = setTimeout(() => Result.fromAsync(() => fetchTracks()), Time.Second * Number(process.env.TIMEOUT_SECONDS ?? 3));
@@ -90,8 +91,9 @@ fastify.get("/decodetrack", {
     const { track } = request.query as { track: string };
 
     const fetchTracks = async () => {
+        if (reply.sent) return;
         const result = await node.decodeTracks(track);
-        if (!reply.sent) return reply.send(result);
+        return reply.send(result);
     };
 
     const timeout = setTimeout(() => Result.fromAsync(() => fetchTracks()), Time.Second * Number(process.env.TIMEOUT_SECONDS ?? 3));
@@ -108,8 +110,9 @@ fastify.post("/decodetracks", {
     );
     const { tracks } = request.body as { tracks: string };
     const fetchTracks = async () => {
+        if (reply.sent) return;
         const result = await node.decodeTracks(tracks);
-        if (!reply.sent) return reply.send(result);
+        return reply.send(result);
     };
 
     const timeout = setTimeout(() => Result.fromAsync(() => fetchTracks()), Time.Second * Number(process.env.TIMEOUT_SECONDS ?? 3));
