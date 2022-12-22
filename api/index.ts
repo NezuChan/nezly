@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable no-nested-ternary */
 import "reflect-metadata";
 import "dotenv/config";
@@ -11,6 +12,8 @@ import { REST } from "@kirishima/rest";
 import { LoadTypeEnum } from "lavalink-api-types";
 import { fetch } from "undici";
 import { BodyInit } from "undici/types/fetch";
+import { Result } from "@sapphire/result";
+import { Time } from "@sapphire/time-utilities";
 
 const fastify = Fastify({
     logger: Pino({
@@ -66,8 +69,13 @@ fastify.get("/loadtracks", {
     const source = identifier.split(":")[0];
     const query = identifier.split(":")[1];
 
-    const result = await node.loadTracks(source ? { source, query } : identifier);
-    return reply.send(result);
+    const fetchTracks = async () => {
+        const result = await node.loadTracks(source ? { source, query } : identifier);
+        if (!reply.sent) return reply.send(result);
+    };
+
+    const timeout = setTimeout(() => Result.fromAsync(() => fetchTracks()), Time.Second * Number(process.env.TIMEOUT_SECONDS ?? 3));
+    return fetchTracks().then(() => clearTimeout(timeout));
 });
 
 fastify.get("/decodetrack", {
@@ -85,8 +93,13 @@ fastify.get("/decodetrack", {
     );
     const { track } = request.query as { track: string };
 
-    const result = await node.decodeTracks(track);
-    return reply.send(result);
+    const fetchTracks = async () => {
+        const result = await node.decodeTracks(track);
+        if (!reply.sent) return reply.send(result);
+    };
+
+    const timeout = setTimeout(() => Result.fromAsync(() => fetchTracks()), Time.Second * Number(process.env.TIMEOUT_SECONDS ?? 3));
+    return fetchTracks().then(() => clearTimeout(timeout));
 });
 
 fastify.post("/decodetracks", {
@@ -98,9 +111,13 @@ fastify.post("/decodetracks", {
         Array.isArray(request.headers["x-node-name"]) ? request.headers["x-node-name"][0] : request.headers["x-node-name"]
     );
     const { tracks } = request.body as { tracks: string };
+    const fetchTracks = async () => {
+        const result = await node.decodeTracks(tracks);
+        if (!reply.sent) return reply.send(result);
+    };
 
-    const result = await node.decodeTracks(tracks);
-    return reply.send(result);
+    const timeout = setTimeout(() => Result.fromAsync(() => fetchTracks()), Time.Second * Number(process.env.TIMEOUT_SECONDS ?? 3));
+    return fetchTracks().then(() => clearTimeout(timeout));
 });
 
 fastify.get("*", {

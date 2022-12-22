@@ -15,7 +15,7 @@
 # Features
 - Written in TypeScript
 - Multiple Lavalink nodes support
-- Configure-able response timeout
+- Configure-able response timeout, for retries (only for `/loadtracks`, `/decodetracks`, `/decodetrack` routes)
 - Vercel Serverless support
 - Use preferred custom node using `x-node-name` headers
 - Usage analytics, such as tracks info, requester (if user append x-requester-id). everything were sent to client webhook (if set).
