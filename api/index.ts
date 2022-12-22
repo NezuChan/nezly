@@ -1,7 +1,9 @@
 import Fastify from "fastify";
+import PinoPretty from "pino-pretty";
+import Pino from "pino";
 
 const fastify = Fastify({
-    logger: {
+    logger: Pino({
         name: "nezu",
         timestamp: true,
         level: process.env.NODE_ENV === "production" ? "info" : "trace",
@@ -9,13 +11,8 @@ const fastify = Fastify({
             bindings: () => ({
                 pid: "Nezly"
             })
-        },
-        transport: {
-            targets: [
-                { target: "pino-pretty", level: process.env.NODE_ENV === "production" ? "info" : "trace", options: { translateTime: "SYS:yyyy-mm-dd HH:MM:ss.l o" } }
-            ]
         }
-    }
+    }, PinoPretty())
 });
 
 fastify.get("/", () => ({ message: "LavaLink REST Proxy API" }));

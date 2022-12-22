@@ -51,6 +51,7 @@
     "dotenv": "^16.0.3",
     "fastify": "^4.10.2",
     "lavalink-api-types": "^1.1.5",
+    "pino": "^8.8.0",
     "pino-pretty": "^9.1.1",
     "reflect-metadata": "^0.1.13",
     "undici": "^5.14.0"
