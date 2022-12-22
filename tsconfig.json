@@ -15,8 +15,8 @@
       "importHelpers": true,
       "resolveJsonModule": true,
       "strictNullChecks": true,
-      "typeRoots": ["node_modules/@types", "src/typings"]
+      "typeRoots": ["node_modules/@types", "api/typings"]
   },
   "exclude": ["node_modules", "node_modules/**/**.d.ts"],
-  "include": ["src/**/**.ts", "src/**/**.json", "tsup.config.ts"],
+  "include": ["api/**/**.ts", "api/**/**.json", "tsup.config.ts"],
 }
