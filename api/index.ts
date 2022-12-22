@@ -58,7 +58,9 @@ fastify.get("/loadtracks", {
         if (process.env.AUTHORIZATION && request.headers.authorization !== process.env.AUTHORIZATION) return reply.status(401);
     }
 }, async (request, reply) => {
-    const node = getLavalinkNode();
+    const node = getLavalinkNode(
+        Array.isArray(request.headers["x-node-name"]) ? request.headers["x-node-name"][0] : request.headers["x-node-name"]
+    );
     const { identifier } = request.query as { identifier: string };
 
     const source = identifier.split(":")[0];
@@ -78,7 +80,9 @@ fastify.get("/decodetrack", {
         if (process.env.AUTHORIZATION && request.headers.authorization !== process.env.AUTHORIZATION) return reply.status(401);
     }
 }, async (request, reply) => {
-    const node = getLavalinkNode();
+    const node = getLavalinkNode(
+        Array.isArray(request.headers["x-node-name"]) ? request.headers["x-node-name"][0] : request.headers["x-node-name"]
+    );
     const { track } = request.query as { track: string };
 
     const result = await node.decodeTracks(track);
@@ -90,7 +94,9 @@ fastify.post("/decodetracks", {
         if (process.env.AUTHORIZATION && request.headers.authorization !== process.env.AUTHORIZATION) return reply.status(401);
     }
 }, async (request, reply) => {
-    const node = getLavalinkNode();
+    const node = getLavalinkNode(
+        Array.isArray(request.headers["x-node-name"]) ? request.headers["x-node-name"][0] : request.headers["x-node-name"]
+    );
     const { tracks } = request.body as { tracks: string };
 
     const result = await node.decodeTracks(tracks);
@@ -102,7 +108,9 @@ fastify.get("*", {
         if (process.env.AUTHORIZATION && request.headers.authorization !== process.env.AUTHORIZATION) return reply.status(401);
     }
 }, async (request, reply) => {
-    const node = getLavalinkNode();
+    const node = getLavalinkNode(
+        Array.isArray(request.headers["x-node-name"]) ? request.headers["x-node-name"][0] : request.headers["x-node-name"]
+    );
     const fetchResult = await fetch(`${node.url}${request.url}`, { method: "GET", headers: { ...node.headers } });
     if (fetchResult.headers.get("content-type")?.startsWith("application/json")) return reply.status(fetchResult.status).send(await fetchResult.json());
     return reply.status(fetchResult.status).send(await fetchResult.text());
@@ -113,7 +121,9 @@ fastify.post("*", {
         if (process.env.AUTHORIZATION && request.headers.authorization !== process.env.AUTHORIZATION) return reply.status(401);
     }
 }, async (request, reply) => {
-    const node = getLavalinkNode();
+    const node = getLavalinkNode(
+        Array.isArray(request.headers["x-node-name"]) ? request.headers["x-node-name"][0] : request.headers["x-node-name"]
+    );
     const fetchResult = await fetch(`${node.url}${request.url}`, { method: "POST", body: request.body as BodyInit, headers: { ...node.headers } });
     if (fetchResult.headers.get("content-type")?.startsWith("application/json")) return reply.status(fetchResult.status).send(await fetchResult.json());
     return reply.status(fetchResult.status).send(await fetchResult.text());
@@ -124,7 +134,9 @@ fastify.patch("*", {
         if (process.env.AUTHORIZATION && request.headers.authorization !== process.env.AUTHORIZATION) return reply.status(401);
     }
 }, async (request, reply) => {
-    const node = getLavalinkNode();
+    const node = getLavalinkNode(
+        Array.isArray(request.headers["x-node-name"]) ? request.headers["x-node-name"][0] : request.headers["x-node-name"]
+    );
     const fetchResult = await fetch(`${node.url}${request.url}`, { method: "patch", body: request.body as BodyInit, headers: { ...node.headers } });
     if (fetchResult.headers.get("content-type")?.startsWith("application/json")) return reply.status(fetchResult.status).send(await fetchResult.json());
     return reply.status(fetchResult.status).send(await fetchResult.text());
