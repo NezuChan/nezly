@@ -39,7 +39,7 @@ fastify.get("/", () => ({ message: "LavaLink REST Proxy API" }));
 
 for (const route of cast<string[]>(JSON.parse(process.env.DISABLED_ROUTES ?? "[]"))) {
     fastify.route({
-        method: ["GET", "POST"],
+        method: ["GET", "POST", "PATCH"],
         url: route,
         handler: async (request, reply) => reply.status(404).send({ timestamp: new Date().toISOString(), status: 404, error: "Not Found", message: "Not Found", path: request.url })
     });
@@ -115,6 +115,17 @@ fastify.post("*", {
 }, async (request, reply) => {
     const node = getLavalinkNode();
     const fetchResult = await fetch(`${node.url}${request.url}`, { method: "POST", body: request.body as BodyInit, headers: { ...node.headers } });
+    if (fetchResult.headers.get("content-type")?.startsWith("application/json")) return reply.status(fetchResult.status).send(await fetchResult.json());
+    return reply.status(fetchResult.status).send(await fetchResult.text());
+});
+
+fastify.patch("*", {
+    preHandler: async (request, reply) => {
+        if (process.env.AUTHORIZATION && request.headers.authorization !== process.env.AUTHORIZATION) return reply.status(401);
+    }
+}, async (request, reply) => {
+    const node = getLavalinkNode();
+    const fetchResult = await fetch(`${node.url}${request.url}`, { method: "patch", body: request.body as BodyInit, headers: { ...node.headers } });
     if (fetchResult.headers.get("content-type")?.startsWith("application/json")) return reply.status(fetchResult.status).send(await fetchResult.json());
     return reply.status(fetchResult.status).send(await fetchResult.text());
 });
