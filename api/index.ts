@@ -9,7 +9,6 @@ import Pino from "pino";
 import { NodeOptions } from "./types";
 import { cast } from "@sapphire/utilities";
 import { REST } from "@kirishima/rest";
-import { LoadTypeEnum } from "lavalink-api-types";
 import { fetch } from "undici";
 import { BodyInit } from "undici/types/fetch";
 import { Result } from "@sapphire/result";
@@ -54,11 +53,8 @@ fastify.get("/loadtracks", {
             identifier: { type: "string" }
         }
     },
-    preHandler: async (request, reply) => {
-        const { identifier } = request.query as { identifier?: string };
-
-        if (!identifier) return reply.send({ playlistInfo: {}, loadType: LoadTypeEnum.NO_MATCHES, tracks: [] });
-        if (process.env.AUTHORIZATION && request.headers.authorization !== process.env.AUTHORIZATION) return reply.status(401);
+    preHandler: async (request, reply, done) => {
+        if (process.env.AUTHORIZATION && request.headers.authorization !== process.env.AUTHORIZATION) return done(new Error("Unauthorized"));
     }
 }, async (request, reply) => {
     const node = getLavalinkNode(
@@ -84,8 +80,8 @@ fastify.get("/decodetrack", {
             track: { type: "string" }
         }
     },
-    preHandler: async (request, reply) => {
-        if (process.env.AUTHORIZATION && request.headers.authorization !== process.env.AUTHORIZATION) return reply.status(401);
+    preHandler: async (request, reply, done) => {
+        if (process.env.AUTHORIZATION && request.headers.authorization !== process.env.AUTHORIZATION) return done(new Error("Unauthorized"));
     }
 }, async (request, reply) => {
     const node = getLavalinkNode(
@@ -103,8 +99,8 @@ fastify.get("/decodetrack", {
 });
 
 fastify.post("/decodetracks", {
-    preHandler: async (request, reply) => {
-        if (process.env.AUTHORIZATION && request.headers.authorization !== process.env.AUTHORIZATION) return reply.status(401);
+    preHandler: async (request, reply, done) => {
+        if (process.env.AUTHORIZATION && request.headers.authorization !== process.env.AUTHORIZATION) return done(new Error("Unauthorized"));
     }
 }, async (request, reply) => {
     const node = getLavalinkNode(
@@ -121,8 +117,8 @@ fastify.post("/decodetracks", {
 });
 
 fastify.get("*", {
-    preHandler: async (request, reply) => {
-        if (process.env.AUTHORIZATION && request.headers.authorization !== process.env.AUTHORIZATION) return reply.status(401);
+    preHandler: async (request, reply, done) => {
+        if (process.env.AUTHORIZATION && request.headers.authorization !== process.env.AUTHORIZATION) return done(new Error("Unauthorized"));
     }
 }, async (request, reply) => {
     const node = getLavalinkNode(
@@ -134,8 +130,8 @@ fastify.get("*", {
 });
 
 fastify.post("*", {
-    preHandler: async (request, reply) => {
-        if (process.env.AUTHORIZATION && request.headers.authorization !== process.env.AUTHORIZATION) return reply.status(401);
+    preHandler: async (request, reply, done) => {
+        if (process.env.AUTHORIZATION && request.headers.authorization !== process.env.AUTHORIZATION) return done(new Error("Unauthorized"));
     }
 }, async (request, reply) => {
     const node = getLavalinkNode(
@@ -147,8 +143,8 @@ fastify.post("*", {
 });
 
 fastify.patch("*", {
-    preHandler: async (request, reply) => {
-        if (process.env.AUTHORIZATION && request.headers.authorization !== process.env.AUTHORIZATION) return reply.status(401);
+    preHandler: async (request, reply, done) => {
+        if (process.env.AUTHORIZATION && request.headers.authorization !== process.env.AUTHORIZATION) return done(new Error("Unauthorized"));
     }
 }, async (request, reply) => {
     const node = getLavalinkNode(
