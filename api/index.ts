@@ -20,4 +20,4 @@ const fastify = Fastify({
 
 fastify.get("/", () => ({ message: "LavaLink REST Proxy API" }));
 
-await fastify.listen({ host: "0.0.0.0", port: Number(process.env.PORT ?? 3000) });
+void fastify.listen({ host: "0.0.0.0", port: Number(process.env.PORT ?? 3000) });

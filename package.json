@@ -9,7 +9,6 @@
     "lint:fix": "eslint **/*.ts --fix",
     "start:dev": "npm run compile && node dist"
   },
-  "type": "module",
   "author": "KagChi",
   "license": "GPL-3.0",
   "devDependencies": {
