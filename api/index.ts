@@ -8,6 +8,7 @@ import Pino from "pino";
 import { NodeOptions } from "./types";
 import { cast } from "@sapphire/utilities";
 import { REST } from "@kirishima/rest";
+import { LoadTypeEnum } from "lavalink-api-types";
 
 const fastify = Fastify({
     logger: Pino({
@@ -39,6 +40,12 @@ fastify.get("/loadtracks", {
         querystring: {
             identifier: { type: "string" }
         }
+    },
+    preHandler: async (request, reply) => {
+        const { identifier } = request.query as { identifier?: string };
+
+        if (!identifier) return reply.send({ playlistInfo: {}, loadType: LoadTypeEnum.NO_MATCHES, tracks: [] });
+        if (process.env.AUTHORIZATION && request.headers.authorization !== process.env.AUTHORIZATION) return reply.status(401);
     }
 }, async (request, reply) => {
     const node = getLavalinkNode();
@@ -56,6 +63,9 @@ fastify.get("/decodetrack", {
         querystring: {
             track: { type: "string" }
         }
+    },
+    preHandler: async (request, reply) => {
+        if (process.env.AUTHORIZATION && request.headers.authorization !== process.env.AUTHORIZATION) return reply.status(401);
     }
 }, async (request, reply) => {
     const node = getLavalinkNode();
@@ -66,7 +76,9 @@ fastify.get("/decodetrack", {
 });
 
 fastify.post("/decodetracks", {
-
+    preHandler: async (request, reply) => {
+        if (process.env.AUTHORIZATION && request.headers.authorization !== process.env.AUTHORIZATION) return reply.status(401);
+    }
 }, async (request, reply) => {
     const node = getLavalinkNode();
     const { tracks } = request.body as { tracks: string };
