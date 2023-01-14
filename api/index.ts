@@ -57,9 +57,6 @@ fastify.get("/loadtracks", {
         if (process.env.AUTHORIZATION && request.headers.authorization !== process.env.AUTHORIZATION) return done(new Error("Unauthorized"));
     }
 }, async (request, reply) => {
-    const node = getLavalinkNode(
-        Array.isArray(request.headers["x-node-name"]) ? request.headers["x-node-name"][0] : request.headers["x-node-name"]
-    );
     const { identifier } = request.query as { identifier: string };
 
     const source = identifier.split(":")[0];
@@ -67,7 +64,11 @@ fastify.get("/loadtracks", {
 
     const fetchTracks = async () => {
         if (reply.sent) return;
-        const result = await node.loadTracks(source ? { source, query } : identifier);
+        const result = await getLavalinkNode(
+            Array.isArray(request.headers["x-node-name"]) ? request.headers["x-node-name"][0] : request.headers["x-node-name"]
+        )
+            .loadTracks(source ? { source, query } : identifier);
+
         if (process.env.WEBHOOK_URL) {
             void Result.fromAsync(async () => {
                 await fetch(process.env.WEBHOOK_URL!, {
