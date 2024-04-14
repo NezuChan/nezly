@@ -1,4 +1,4 @@
-FROM node:16-alpine3.14 as build-stage
+FROM node:18.3.0-alpine3.14 as build-stage
 
 LABEL name "Nezly Docker Build"
 LABEL maintainer "KagChi"
@@ -17,7 +17,7 @@ RUN npm run compile
 
 RUN npm prune --production
 
-FROM node:16-alpine3.14
+FROM node:18.3.0-alpine3.14
 
 LABEL name "Nezly Production"
 LABEL maintainer "KagChi"
