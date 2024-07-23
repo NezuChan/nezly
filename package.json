@@ -45,9 +45,9 @@
   },
   "dependencies": {
     "@kirishima/rest": "^0.2.5",
-    "@sapphire/result": "^2.6.0",
-    "@sapphire/time-utilities": "^1.7.8",
-    "@sapphire/utilities": "^3.11.0",
+    "@sapphire/result": "^2.6.6",
+    "@sapphire/time-utilities": "^1.7.12",
+    "@sapphire/utilities": "^3.17.0",
     "dotenv": "^16.0.3",
     "fastify": "^4.10.2",
     "lavalink-api-types": "^1.1.5",
